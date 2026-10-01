@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RETRO DRIVE LB — Classic Car Restoration & Enthusiast Culture | Beirut, Lebanon</title>
+  <meta name="description" content="A Lebanese classic-car restoration and enthusiast brand founded around Charbel Maroun Mehawej’s lifelong passion for vintage automobiles. Preserving memories, mechanical character, and Lebanese road culture.">
+  
+  <!-- Favicon Emblem -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='46' fill='%23172B31' stroke='%23F1E7D3' stroke-width='4'/><text x='50' y='58' font-size='28' font-family='Georgia' font-weight='bold' fill='%23F1E7D3' text-anchor='middle'>RD</text></svg>">
+  
+  <!-- Google Fonts: Editorial Serif & Clean Monospace / Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Serif+Display:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+  <!-- Subtle Film Grain Overlay -->
+  <div class="film-grain" aria-hidden="true"></div>
+
+  <!-- ==========================================================================
+       SITE NAVIGATION — EDITORIAL DESKTOP & INTEGRATED MOBILE
+       ========================================================================== -->
+  <header class="site-nav" id="siteNav">
+    <div class="nav-wrapper">
+      
+      <!-- Brand Wordmark -->
+      <a href="#hero" class="nav-brand" aria-label="Retro Drive LB Home">
+        <div class="brand-emblem">RD</div>
+        <div class="brand-text">
+          <span class="brand-title">Retro Drive LB</span>
+          <span class="brand-subtitle">Atelier &amp; Restorations • Beyrouth</span>
+        </div>
+      </a>
+
+      <!-- Desktop & Mobile Drawer Menu -->
+      <nav class="nav-menu" id="navMenu">
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#childhood" class="nav-link">Story</a></li>
+          <li><a href="#passion" class="nav-link">Founder</a></li>
+          <li><a href="#cars" class="nav-link">The Cars</a></li>
+          <li><a href="#oldsmobile" class="nav-link">The 1970 Olds</a></li>
+          <li><a href="#philosophy" class="nav-link">Philosophy</a></li>
+          <li><a href="#garage" class="nav-link">The Garage</a></li>
+          <li><a href="#events" class="nav-link">Events</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <!-- Navigation Actions: Engine Sound & Menu Trigger -->
+      <div class="nav-actions">
+        <!-- Interactive V8 Engine Instrument (Ignition & Scroll-to-Rev) -->
+        <button class="btn-sound-instrument" id="soundInstrumentBtn" type="button" aria-label="Start and rev 1970 Oldsmobile Rocket V8 engine" title="Click to start Rocket V8 • Scroll page to rev">
+          <span class="instrument-bezel" aria-hidden="true">
+            <span class="instrument-needle" id="soundNeedle"></span>
+            <span class="instrument-led"></span>
+          </span>
+          <span class="instrument-info">
+            <span class="instrument-label">V8</span>
+            <span class="instrument-rpm" id="soundRpmLabel">OFF</span>
+          </span>
+          <span class="instrument-hint" id="soundHint">IGNITION</span>
+        </button>
+
+        <!-- Desktop Action CTA -->
+        <a href="#contact" class="btn-nav-cta">Inquire</a>
+
+        <!-- Mobile Menu Trigger: "MENU" -->
+        <button class="nav-mobile-btn" id="navMobileBtn" type="button" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span class="menu-label">MENU</span>
+          <span class="menu-icon-bars" aria-hidden="true">
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <main>
+    <!-- ==========================================================================
+         HERO SECTION
+         ========================================================================== -->
+    <section class="hero-section" id="hero">
+      <div class="container">
+        <div class="hero-editorial-grid">
+          
+          <div class="hero-copy-column">
+            <div class="hero-vintage-masthead">
+              <span class="hero-issue-no">VOL. 01 — AUTOMOTIVE ARCHIVE</span>
+              <div class="hero-line-accent" aria-hidden="true"></div>
+              <span class="label-mono">BEIRUT, LIBAN</span>
+            </div>
+
+            <h1 class="hero-title">
+              Some dreams<br>
+              <span class="highlight-accent">grow older</span><br>
+              with you.
+            </h1>
+
+            <!-- Featured Hero Car Mobile Visual Slot -->
+            <div class="hero-visual-mobile-slot" aria-hidden="true">
+              <div class="hero-arched-frame">
+                <img src="images/hero_classic_car.jpg" alt="Restored 1970 classic American coupe on Lebanese coastal road at golden hour" width="1200" height="825">
+              </div>
+              <div class="hero-caption-tab">
+                <p><span>PLATE: 74100 LIBAN</span> • Mediterranean Overlook, Golden Hour</p>
+              </div>
+            </div>
+
+            <p class="hero-lead-text">
+              Retro Drive LB is a tribute to living machines with heartbeat and history. Founded around Charbel Maroun Mehawej’s lifelong passion for vintage automobiles, preserving mechanical soul across Lebanese roads.
+            </p>
+
+            <div class="hero-actions">
+              <a href="#garage" class="btn-primary-editorial">
+                Explore The Garage
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </a>
+              <a href="#childhood" class="btn-secondary-editorial">Our Story</a>
+            </div>
+
+            <div class="hero-specs-bar">
+              <div class="hero-spec-item">
+                <span class="hero-spec-label">Chassis Focus</span>
+                <span class="hero-spec-val">1960s – 1980s Classics</span>
+              </div>
+              <div class="hero-spec-item">
+                <span class="hero-spec-label">Craft</span>
+                <span class="hero-spec-val">Bespoke Restorations</span>
+              </div>
+              <div class="hero-spec-item">
+                <span class="hero-spec-label">Territory</span>
+                <span class="hero-spec-val">Lebanon &amp; The Levant</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hero-visual-column">
+            <div class="hero-arched-frame">
+              <img src="images/hero_classic_car.jpg" alt="Restored 1970 classic American coupe on Lebanese coastal road at golden hour" width="1200" height="825">
+            </div>
+            <div class="hero-caption-tab">
+              <p><span>PLATE: 74100 LIBAN</span> • Mediterranean Overlook, Golden Hour</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- Seamless Organic Transition to Childhood (Cream -> Petrol) -->
+      <div class="curve-transition" aria-hidden="true">
+        <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+          <path fill="var(--color-petrol)" d="M0,25 C320,55 620,8 920,40 C1060,55 1140,22 1200,32 L1200,60 L0,60 Z"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SECTION 01 — WHERE IT STARTED ("IT STARTED WITH A MOVIE.")
+         ========================================================================== -->
+    <section class="section-childhood" id="childhood">
+      <div class="container">
+        <div class="childhood-editorial-wrap">
+
+          <div class="childhood-visual-box">
+            <span class="broadcast-stamp">ARCHIVE 1978 • TÉLÉ-LIBAN &amp; CAIRO CINEMA</span>
+            <div class="childhood-photo-frame">
+              <img src="images/childhood_cinema.jpg" alt="Childhood living room in Beirut with mother and child watching classic cinema on vintage television" width="800" height="600">
+            </div>
+            <div class="childhood-caption-note">
+              <span>Warm tungsten light, woven carpets, and black-and-white roadsters on CRT glow</span>
+            </div>
+          </div>
+
+          <div class="childhood-text-box">
+            <span class="section-label">Childhood Genesis</span>
+            <h2 class="section-heading-lg">It started with a movie.</h2>
+            
+            <div class="childhood-narrative">
+              <p>
+                Long before the sound of ratchets and the scent of warmed motor oil filled the garage, there was a child sitting cross-legged in a Beirut living room, watching classic black-and-white films on Egyptian television beside his mother.
+              </p>
+              <p>
+                While the actors delivered their legendary dialogues, a young Charbel was captivated by what carried them: the graceful sweeping fenders, chrome grilles, and unmistakable presence of vintage automobiles gliding across the screen.
+              </p>
+            </div>
+
+            <div class="childhood-memory-pill">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              <span>“The movies ended, but the cars stayed with him.”</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- Seamless Organic Transition to Passion (Petrol -> Cream) -->
+      <div class="curve-transition" aria-hidden="true">
+        <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+          <path fill="var(--color-cream)" d="M0,32 C300,10 600,52 900,20 C1050,8 1140,42 1200,25 L1200,60 L0,60 Z"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SECTION 02 — THE PASSION ("THEN THE DREAM BECAME REAL.")
+         FEATURING CHARBEL MAROUN MEHAWEJ
+         ========================================================================== -->
+    <section class="section-passion" id="passion">
+      <div class="container">
+        <div class="passion-editorial-wrap">
+
+          <div class="passion-content">
+            <span class="section-label light-theme">The Evolution</span>
+            <h2 class="section-heading-lg">Then the dream became real.</h2>
+
+            <p style="font-size: 1.25rem; color: var(--color-charcoal-light); margin-bottom: 2rem;">
+              Childhood curiosity did not fade; it quietly waited. In 2005, following a major career transition, Charbel Maroun Mehawej turned his enduring fascination into a devoted life’s work.
+            </p>
+
+            <div class="passion-timeline-editorial">
+              <div class="timeline-chapter">
+                <span class="chapter-year">2005</span>
+                <h3 class="chapter-title">A New Chapter</h3>
+                <p class="chapter-desc">
+                  Stepping away from conventional career tracks to dedicate hands, heart, and time to vintage mechanical preservation.
+                </p>
+              </div>
+
+              <div class="timeline-chapter">
+                <span class="chapter-year">THE COLLECTION</span>
+                <h3 class="chapter-title">Living Machines, Not Metal Boxes</h3>
+                <p class="chapter-desc">
+                  Acquiring rare survivors from the 1960s and 70s. For Charbel, each car possessed an unmistakable personality, a distinctive scent of aged leather and gasoline, and a soul waiting to be heard.
+                </p>
+              </div>
+
+              <div class="timeline-chapter">
+                <span class="chapter-year">RETRO DRIVE LB</span>
+                <h3 class="chapter-title">Preserving Lebanese Motoring Heritage</h3>
+                <p class="chapter-desc">
+                  Expanding from a private garage sanctuary into a trusted restoration atelier and gathering point for Lebanese classic automobile enthusiasts.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="passion-charbel-display">
+            <div class="charbel-photo-card">
+              <img src="images/charbel.jpg" alt="Charbel Maroun Mehawej, founder of Retro Drive LB, in his workshop leaning against his classic roadster" width="800" height="1422">
+              <div class="charbel-card-footer">
+                <div>
+                  <h4 class="charbel-name-title">Charbel Maroun Mehawej</h4>
+                  <span class="charbel-name-sub">Founder &amp; Master Restorer</span>
+                </div>
+                <div class="liban-registration-tag">
+                  63 LIBAN 6667
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SECTION 03 — THE CARS ("NOT JUST MACHINES.")
+         EDITORIAL FLOWING COLLECTION (NON-GRID)
+         ========================================================================== -->
+    <section class="section-cars" id="cars">
+      <div class="container">
+        
+        <div class="cars-header-editorial">
+          <span class="section-label light-theme">The Stable</span>
+          <h2 class="section-heading-lg">Not just machines.</h2>
+          <p class="editorial-quote">
+            “They have personalities. Stories. And sometimes, even a smell you never forget.”
+          </p>
+        </div>
+
+        <div class="cars-editorial-flow">
+          
+          <!-- Car 01: 1970 Oldsmobile Cutlass -->
+          <article class="car-showcase-row">
+            <div class="car-media-col">
+              <div class="car-print-photo tilt-left">
+                <img src="images/hero_classic_car.jpg" alt="1970 Oldsmobile Cutlass Coupe on Lebanese coastal highway" width="800" height="550">
+                <div class="car-print-meta">
+                  <span>PLATE: 74100 LIBAN</span>
+                  <span>MEDITERRANEAN COASTAL RUN</span>
+                </div>
+              </div>
+            </div>
+            <div class="car-text-col">
+              <span class="car-era-tag">Lansing / Beirut • 1970</span>
+              <h3 class="car-name-title">1970 Oldsmobile Cutlass 442</h3>
+              <p class="car-story-paragraph">
+                The flagship cruiser of the workshop. Deep navy metallic with pristine chrome accents, powered by an unrestrained Rocket 350 V8 rebuilt bolt by bolt right here in Lebanon.
+              </p>
+              <div class="car-spec-grid">
+                <div class="car-spec-entry">
+                  <span class="spec-key">Displacement</span>
+                  <span class="spec-val">5.7L Rocket V8</span>
+                </div>
+                <div class="car-spec-entry">
+                  <span class="spec-key">Induction</span>
+                  <span class="spec-val">Rochester 4-Barrel</span>
+                </div>
+                <div class="car-spec-entry">
+                  <span class="spec-key">Gearbox</span>
+                  <span class="spec-val">TH-350 Automatic</span>
+                </div>
+                <div class="car-spec-entry">
+                  <span class="spec-key">Aspiration</span>
+                  <span class="spec-val">Deep American Rumble</span>
+                </div>
+              </div>
+              <button class="btn-car-explore" data-car="oldsmobile" type="button">
+                Inspect Mechanical Dossier
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </button>
+            </div>
+          </article>
+
+          <!-- Car 02: 1968 Mercedes-Benz 280SL Pagoda -->
+          <article class="car-showcase-row row-reverse">
+            <div class="car-media-col">
+              <div class="car-print-photo tilt-right">
+                <img src="images/classic_car_mercedes.jpg" alt="1968 Mercedes-Benz 280SL Pagoda overlooking Mount Lebanon and the sea" width="800" height="600">
+                <div class="car-print-meta">
+                  <span>STUTTGART INGENUITY</span>
+                  <span>MOUNT LEBANON ESCAPE</span>
+                </div>
+              </div>
+            </div>
+            <div class="car-text-col">
+              <span class="car-era-tag">Stuttgart • 1968</span>
+              <h3 class="car-name-title">1968 Mercedes-Benz 280SL ‘Pagoda’</h3>
+              <p class="car-story-paragraph">
+                The pinnacle of Mediterranean elegance. Built for spirited climbs from the Beirut corniche through the pine hills of Broummana. Flawlessly tuned mechanical fuel injection.
+              </p>
+              <div class="car-spec-grid">
+                <div class="car-spec-entry">
+                  <span class="spec-key">Engine</span>
+                  <span class="spec-val">2.8L Inline-6 (M130)</span>
+                </div>
+                <div class="car-spec-entry">
+                  <span class="spec-key">Fuel System</span>
+                  <span class="spec-val">Bosch Mechanical Pump</span>
+                </div>
+                <div class="car-spec-entry">
+                  <span class="spec-key">Cabin</span>
+                  <span class="spec-val">Cognac Perforated Leather</span>
+                </div>
+                <div class="car-spec-entry">
+                  <span class="spec-key">Character</span>
+                  <span class="spec-val">Silky Alpine Symphony</span>
+                </div>
+              </div>
+              <button class="btn-car-explore" data-car="mercedes" type="button">
+                Inspect Mechanical Dossier
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </button>
+            </div>
+          </article>
+
+          <!-- Car 03: 1972 Alfa Romeo GTV 2000 -->
+          <article class="car-showcase-row">
+            <div class="car-media-col">
+              <div class="car-print-photo tilt-left">
+                <img src="images/classic_car_alfa.jpg" alt="1972 Alfa Romeo 2000 GTV in ochre yellow under Byblos stone arches" width="800" height="600">
+                <div class="car-print-meta">
+                  <span>PLATE: 72 GTV LIB</span>
+                  <span>BYBLOS STONE COURTYARD</span>
+                </div>
+              </div>
+            </div>
+            <div class="car-text-col">
+              <span class="car-era-tag">Milano • 1972</span>
+              <h3 class="car-name-title">1972 Alfa Romeo 2000 GT Veloce</h3>
+              <p class="car-story-paragraph">
+                Bertone styling clothed in warm vintage ochre. Twin-cam song and throat-clearing Dell’Orto carburetors make this lightweight coupe an apex hunter on the bends of Mount Lebanon.
+              </p>
+              <div class="car-spec-grid">
+                <div class="car-spec-entry">
+                  <span class="spec-key">Powertrain</span>
+                  <span class="spec-val">Twin-Cam 2.0L (132 hp)</span>
+                </div>
+                <div class="car-spec-entry">
+                  <span class="spec-key">Carburetors</span>
+                  <span class="spec-val">Dual Dell’Orto DHLA 40</span>
+                </div>
+                <div class="car-spec-entry">
+                  <span class="spec-key">Transmission</span>
+                  <span class="spec-val">5-Speed Manual</span>
+                </div>
+                <div class="car-spec-entry">
+                  <span class="spec-key">Spirit</span>
+                  <span class="spec-val">Aggressive Italian Throttle</span>
+                </div>
+              </div>
+              <button class="btn-car-explore" data-car="alfa" type="button">
+                Inspect Mechanical Dossier
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </button>
+            </div>
+          </article>
+
+        </div>
+
+      </div>
+      <!-- Seamless Organic Transition to Oldsmobile (Cream -> Petrol Dark) -->
+      <div class="curve-transition" aria-hidden="true">
+        <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+          <path fill="var(--color-petrol-dark)" d="M0,22 C320,52 640,12 920,44 C1080,56 1150,26 1200,34 L1200,60 L0,60 Z"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SECTION 04 — THE 1970 OLDSMOBILE ("ONE CAR CHANGED EVERYTHING.")
+         INTERACTIVE BEFORE / AFTER SLIDER & RESTORATION JOURNAL
+         ========================================================================== -->
+    <section class="section-oldsmobile" id="oldsmobile">
+      <div class="container">
+        
+        <div class="oldsmobile-hero-bar">
+          <span class="section-label">Restoration Milestone</span>
+          <h2 class="oldsmobile-title">One car changed everything.</h2>
+          <p class="oldsmobile-sub">1970 Oldsmobile Cutlass</p>
+          <p class="oldsmobile-story-text">
+            Found dormant under decades of dust with seized pistons and tired paint. Charbel and his friend Rabih dismantled the car piece by piece, nut by nut, and rebuilt it with unwavering dedication over 18 months of late-night garage sessions.
+          </p>
+        </div>
+
+        <!-- Interactive Before / After Comparison Slider (Clip-Path & Pointer Events) -->
+        <div class="restoration-slider-container" id="restorationSlider" style="--reveal: 50%;" aria-label="Interactive Before and After slider showing 1970 Oldsmobile restoration" tabindex="0">
+          <div class="slider-wrapper">
+            <!-- Before Image (Dusty Barn Find - Underneath) -->
+            <img class="slider-img img-before" src="images/oldsmobile_before.jpg" alt="Unrestored 1970 Oldsmobile barn find in weathered dusty workshop" width="1200" height="750">
+            
+            <!-- After Image (Fully Restored - Progressively Revealed with clip-path) -->
+            <img class="slider-img img-after" src="images/oldsmobile_restored.jpg" alt="Fully restored 1970 Oldsmobile Cutlass outside Lebanese garage workshop" width="1200" height="750">
+
+            <!-- Draggable Tactile Handle -->
+            <div class="slider-handle" aria-hidden="true">
+              <div class="slider-dial-button" role="slider" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" aria-label="Drag to compare restoration stages">
+                <span class="slider-dial-arrows">‹ ›</span>
+              </div>
+            </div>
+
+            <!-- Descriptive Labels -->
+            <div class="slider-label-pill pill-before">Before: Barn Find (Raw Condition)</div>
+            <div class="slider-label-pill pill-after">After: Restored In Lebanon</div>
+          </div>
+        </div>
+
+        <!-- Restoration Workshop Journal Log -->
+        <div class="oldsmobile-journal-wrap">
+          <div class="journal-photo-stack">
+            <div class="journal-main-frame">
+              <img src="images/restoration_workshop.jpg" alt="Mechanics Rabih and Charbel's workshop team rebuilding the V8 engine in Beirut workshop" width="800" height="600">
+            </div>
+            <div class="journal-rabih-note">
+              <p>“Piece by piece. Bolt by bolt. Until it came back to life.”</p>
+              <span>— Charbel &amp; Rabih, Restoration Journal</span>
+            </div>
+          </div>
+
+          <div class="journal-log-steps">
+            <div class="log-entry">
+              <span class="log-step-num">01</span>
+              <div class="log-content">
+                <h4>Teardown &amp; Cataloging</h4>
+                <p>Every individual trim clip, bolt, and chrome script was unbolted, marked, and sorted into wooden trays.</p>
+              </div>
+            </div>
+
+            <div class="log-entry">
+              <span class="log-step-num">02</span>
+              <div class="log-content">
+                <h4>Chassis &amp; Metal Straightening</h4>
+                <p>Bare frame stripped of surface rust. Hammer-formed sheet metal fabrication to restore original body panel tolerances.</p>
+              </div>
+            </div>
+
+            <div class="log-entry">
+              <span class="log-step-num">03</span>
+              <div class="log-content">
+                <h4>V8 Rocket 350 Blueprinting</h4>
+                <p>Crankshaft balanced, new bearings seated, camshaft dialed in, and the 4-barrel carburetor tuned for Lebanese sea-level air.</p>
+              </div>
+            </div>
+
+            <div class="log-entry">
+              <span class="log-step-num">04</span>
+              <div class="log-content">
+                <h4>Deep Lacquer &amp; Final Reassembly</h4>
+                <p>Seven coats of hand-rubbed metallic finish and re-chromed bumpers. The day the ignition turned over, the workshop shook.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <!-- Seamless Organic Transition to Philosophy (Petrol Dark -> Cream) -->
+      <div class="curve-transition" aria-hidden="true">
+        <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+          <path fill="var(--color-cream)" d="M0,35 C280,12 580,52 920,22 C1160,8 1140,40 1200,28 L1200,60 L0,60 Z"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SECTION 05 — THE PHILOSOPHY OF CARE
+         ("YOU DON'T JUST OWN A CLASSIC. YOU TAKE CARE OF IT.")
+         ========================================================================== -->
+    <section class="section-philosophy" id="philosophy">
+      <div class="container">
+        <div class="philosophy-editorial-wrap">
+          
+          <div>
+            <span class="section-label light-theme">Our Ethos</span>
+            <h2 class="philosophy-headline">
+              You don’t just own a classic.<br>
+              <span>You take care of it.</span>
+            </h2>
+
+            <p class="philosophy-text">
+              For Charbel, vintage cars are not static investment assets parked in museum isolation. They are organic mechanical creatures that breathe, expand, and need regular tactile care.
+            </p>
+
+            <div class="care-pillars-list">
+              <div class="care-pillar-item">
+                <div class="pillar-bullet" aria-hidden="true"></div>
+                <div class="pillar-desc">
+                  <strong>Constant Attention &amp; Tuning</strong>
+                  <p>Listening to valve clearances, checking points gaps, and synchronizing twin carbs by ear rather than relying on computer codes.</p>
+                </div>
+              </div>
+
+              <div class="care-pillar-item">
+                <div class="pillar-bullet" aria-hidden="true"></div>
+                <div class="pillar-desc">
+                  <strong>Preservation of Mechanical Character</strong>
+                  <p>Never erasing the soul. Respecting factory spot welds, preserving original gauges, and maintaining authentic driving ergonomics.</p>
+                </div>
+              </div>
+
+              <div class="care-pillar-item">
+                <div class="pillar-bullet" aria-hidden="true"></div>
+                <div class="pillar-desc">
+                  <strong>Driven With Purpose</strong>
+                  <p>A classic car that does not run becomes brittle. Taking them through mountain roads keeps gaskets lubricated and histories alive.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="philosophy-media">
+            <div class="craft-detail-frame">
+              <img src="images/craftsmanship_detail.jpg" alt="Detail of artisan hands hand-waxing analog gauges and chrome bezel on classic dashboard" width="800" height="600">
+            </div>
+            <div class="craft-quote-tag">
+              <p>“Every time you clean a chrome bezel or check the oil level, you are conversing with the engineers who built it half a century ago.”</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- Seamless Organic Transition to Garage (Cream -> Petrol) -->
+      <div class="curve-transition" aria-hidden="true">
+        <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+          <path fill="var(--color-petrol)" d="M0,28 C340,56 620,10 920,42 C1070,54 1140,24 1200,34 L1200,60 L0,60 Z"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SECTION 06 — THE GARAGE ("FROM PASSION TO CRAFT.")
+         THE 5 CORE WORKSHOP SERVICES (EDITORIAL COMPOSITION)
+         ========================================================================== -->
+    <section class="section-garage" id="garage">
+      <div class="container">
+        
+        <div class="garage-header">
+          <span class="section-label">The Atelier</span>
+          <h2 class="garage-title">From passion to craft.</h2>
+          <p class="garage-intro">
+            What began as two friends in a personal garage has expanded into an authentic preservation workshop for Lebanon's finest vintage machines.
+          </p>
+        </div>
+
+        <div class="crafts-editorial-composition">
+          
+          <!-- Service 1: Full Classic Restoration (Span 7) -->
+          <div class="craft-feature-item craft-item-span-7">
+            <span class="craft-num">CRAFT 01</span>
+            <h3 class="craft-title">Classic Car Restoration</h3>
+            <p class="craft-desc">
+              Comprehensive nut-and-bolt, body-off restorations. From rust repair and metal shaping to complete wiring harness reconstruction, factory-correct upholstery, and mirror-finish paint.
+            </p>
+            <div class="craft-tag-list">
+              <span class="craft-tag">Chassis Alignment</span>
+              <span class="craft-tag">Bare Metal Preparation</span>
+              <span class="craft-tag">Factory Color Codes</span>
+            </div>
+          </div>
+
+          <!-- Service 2: Preservation & Maintenance (Span 5) -->
+          <div class="craft-feature-item craft-item-span-5">
+            <span class="craft-num">CRAFT 02</span>
+            <h3 class="craft-title">Preservation &amp; Maintenance</h3>
+            <p class="craft-desc">
+              Dedicated care schedules for running classics. Carburetor balancing, valve lash adjustment, vintage electrical sorting, and pre-cruise safety inspections.
+            </p>
+            <div class="craft-tag-list">
+              <span class="craft-tag">Carb Synchronization</span>
+              <span class="craft-tag">Fluids &amp; Lubrication</span>
+              <span class="craft-tag">Brake Overhauls</span>
+            </div>
+          </div>
+
+          <!-- Service 3: Mechanical Restoration (Span 4) -->
+          <div class="craft-feature-item craft-item-span-4">
+            <span class="craft-num">CRAFT 03</span>
+            <h3 class="craft-title">Mechanical Restoration</h3>
+            <p class="craft-desc">
+              Engine rebuilds (American V8s, German Inline-6s, Italian Twin-Cams), manual gearboxes, overdrives, differentials, and cooling upgrades for the Lebanese summer climate.
+            </p>
+            <div class="craft-tag-list">
+              <span class="craft-tag">Engine Blueprinting</span>
+              <span class="craft-tag">Head Porting</span>
+              <span class="craft-tag">High-Flow Cooling</span>
+            </div>
+          </div>
+
+          <!-- Service 4: Custom Builds & Period Modifications (Span 4) -->
+          <div class="craft-feature-item craft-item-span-4-mid">
+            <span class="craft-num">CRAFT 04</span>
+            <h3 class="craft-title">Custom Builds &amp; Period Mod</h3>
+            <p class="craft-desc">
+              Gentleman rally preparations, period-correct suspension dampening, stainless exhaust fabrication, and subtle drivability enhancements that preserve vintage character.
+            </p>
+            <div class="craft-tag-list">
+              <span class="craft-tag">Rally Setups</span>
+              <span class="craft-tag">Exhaust Fabrication</span>
+              <span class="craft-tag">Uprated Bushings</span>
+            </div>
+          </div>
+
+          <!-- Service 5: Classic Car Sourcing (Span 4) -->
+          <div class="craft-feature-item craft-item-span-4-last">
+            <span class="craft-num">CRAFT 05</span>
+            <h3 class="craft-title">Classic Car Sourcing</h3>
+            <p class="craft-desc">
+              Locating authentic unmolested survivors tucked away in Lebanese villages and regional barns. Rigorous pre-purchase inspection and provenance verification.
+            </p>
+            <div class="craft-tag-list">
+              <span class="craft-tag">Barn Find Hunting</span>
+              <span class="craft-tag">Provenance Auditing</span>
+              <span class="craft-tag">Import &amp; Clearing</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <!-- Seamless Organic Transition to Events (Petrol -> Cream) -->
+      <div class="curve-transition" aria-hidden="true">
+        <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+          <path fill="var(--color-cream)" d="M0,32 C300,10 600,52 900,20 C1050,8 1140,42 1200,25 L1200,60 L0,60 Z"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SECTION 07 — THE EVENTS ("THE CARS ARE MEANT TO BE DRIVEN.")
+         VINTAGE RALLIES & LEBANESE ROADS CULTURE
+         ========================================================================== -->
+    <section class="section-events" id="events">
+      <div class="container">
+        
+        <div class="events-intro-editorial">
+          <div>
+            <span class="section-label light-theme">Lebanese Road Gatherings</span>
+            <h2 class="events-title">The cars are meant to be driven.</h2>
+          </div>
+          <div>
+            <p class="events-lead-quote">
+              From the sea breezes of the Batroun coast to the switchbacks of Mount Lebanon, Retro Drive LB gathers owners and friends for spontaneous dawn runs, espresso stops, and golden hour rallies.
+            </p>
+          </div>
+        </div>
+
+        <!-- Panoramic Community Cruise Photograph -->
+        <div class="events-panoramic-card">
+          <img src="images/lebanon_classic_cruise.jpg" alt="Vintage classic cars convoy stopped on Lebanese coastal road overlook at sunset, owners chatting over espresso" width="1400" height="787">
+          <div class="panoramic-overlay-badge">
+            <h4>Coastline Overlook Gathering</h4>
+            <p>MGB ROADSTERS • MERCEDES PAGODA • MUSCLE CLASSICS • MEDITERRANEAN SUNSET</p>
+          </div>
+        </div>
+
+        <!-- Event Ledger: Upcoming & Past Archive -->
+        <div class="events-ledger-grid">
+          
+          <div>
+            <h3 class="ledger-column-title">Upcoming Gatherings</h3>
+            <div class="events-entry-list">
+              
+              <div class="event-entry-row">
+                <div class="event-date-box">
+                  <span class="event-date-day">18</span>
+                  <span class="event-date-month">OCT</span>
+                </div>
+                <div class="event-details-box">
+                  <h4 class="event-name">Mount Lebanon Autumn Climb</h4>
+                  <span class="event-location">Beirut ➔ Broummana ➔ Baskinta Pine Ridge</span>
+                </div>
+                <button class="btn-event-rsvp" data-event="Mount Lebanon Autumn Climb" type="button">RSVP</button>
+              </div>
+
+              <div class="event-entry-row">
+                <div class="event-date-box">
+                  <span class="event-date-day">08</span>
+                  <span class="event-date-month">NOV</span>
+                </div>
+                <div class="event-details-box">
+                  <h4 class="event-name">Byblos Port Dawn Run &amp; Espresso</h4>
+                  <span class="event-location">Old Phoenician Harbor Forecourt • 6:30 AM</span>
+                </div>
+                <button class="btn-event-rsvp" data-event="Byblos Port Dawn Run & Espresso" type="button">RSVP</button>
+              </div>
+
+              <div class="event-entry-row">
+                <div class="event-date-box">
+                  <span class="event-date-day">29</span>
+                  <span class="event-date-month">NOV</span>
+                </div>
+                <div class="event-details-box">
+                  <h4 class="event-name">Chouf Cedar Heritage Tour</h4>
+                  <span class="event-location">Deir El Qamar ➔ Beiteddine Palace Pass</span>
+                </div>
+                <button class="btn-event-rsvp" data-event="Chouf Cedar Heritage Tour" type="button">RSVP</button>
+              </div>
+
+            </div>
+          </div>
+
+          <div>
+            <h3 class="ledger-column-title">Past Runs Archive</h3>
+            <div class="events-entry-list">
+
+              <div class="event-entry-row">
+                <div class="event-date-box">
+                  <span class="event-date-day">14</span>
+                  <span class="event-date-month">SEP</span>
+                </div>
+                <div class="event-details-box">
+                  <h4 class="event-name">Batroun Salt Flats Sunset Cruise</h4>
+                  <span class="event-location">24 Vintage Cars • Mediterranean Highway</span>
+                </div>
+                <span class="stamp-badge">Archived</span>
+              </div>
+
+              <div class="event-entry-row">
+                <div class="event-date-box">
+                  <span class="event-date-day">27</span>
+                  <span class="event-date-month">JUL</span>
+                </div>
+                <div class="event-details-box">
+                  <h4 class="event-name">Faraya Mountain Night Run</h4>
+                  <span class="event-location">Cool mountain air &amp; mechanical purr</span>
+                </div>
+                <span class="stamp-badge">Archived</span>
+              </div>
+
+              <div class="event-entry-row">
+                <div class="event-date-box">
+                  <span class="event-date-day">12</span>
+                  <span class="event-date-month">MAY</span>
+                </div>
+                <div class="event-details-box">
+                  <h4 class="event-name">Spring Restoration Workshop Open Day</h4>
+                  <span class="event-location">Beirut Atelier • Carburetor Tuning Demos</span>
+                </div>
+                <span class="stamp-badge">Archived</span>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SECTION 08 — THE COMMUNITY ("MORE THAN A GARAGE.")
+         ========================================================================== -->
+    <section class="section-community" id="community">
+      <div class="container">
+        <div class="community-editorial-grid">
+
+          <div class="community-visual-stack">
+            <div class="community-photo-frame">
+              <img src="images/road_trip_artifacts.jpg" alt="Vintage road trip artifacts on garage workbench: Michelin Lebanon map, cedar key fob, driving glasses" width="800" height="600">
+              <div class="community-artifacts-caption">
+                <span>VINTAGE MICHELIN CARTE LIBAN</span>
+                <span>CEDAR LEATHER FOB &amp; KEYS</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="community-copy-block">
+            <span class="section-label light-theme">The Brotherhood</span>
+            <h2 class="community-headline">More than a garage.</h2>
+            
+            <p class="community-lead-quote">
+              “A place for people who still get excited when they hear an old engine start.”
+            </p>
+
+            <p class="community-narrative-text">
+              In a world rushing toward soulless screens and silent electric pods, Retro Drive LB is an anchor for those who value mechanical honesty. Here, conversations happen over open engine bays, warm Turkish coffee, and maps marked with the best back roads of Lebanon.
+            </p>
+
+            <div class="community-quote-card">
+              <p>
+                “You come here with a loose manifold and leave with three new friends, grease on your sleeves, and a route to the mountains you never knew existed.”
+              </p>
+              <span class="quote-author">— Regular Participant, Retro Drive Weekend Convoy</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- Seamless Organic Transition to Contact (Cream Tint -> Petrol) -->
+      <div class="curve-transition" aria-hidden="true">
+        <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
+          <path fill="var(--color-petrol)" d="M0,25 C320,55 620,8 920,40 C1060,55 1140,22 1200,32 L1200,60 L0,60 Z"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         SECTION 09 — START YOUR RESTORATION ("WHAT'S YOUR STORY?")
+         WARM, TACTILE INQUIRY (NO COLD CORPORATE FORM)
+         ========================================================================== -->
+    <section class="section-contact" id="contact">
+      <div class="container">
+        <div class="contact-layout-grid">
+
+          <div class="contact-story-col">
+            <span class="section-label">Start Your Journey</span>
+            <h2 class="contact-title">What’s your story?</h2>
+            
+            <p class="contact-lead-sub">
+              Have a classic waiting for its second life? Or searching for a mechanical soulmate from the golden eras of motoring?
+            </p>
+
+            <p style="font-size: 1.15rem; color: var(--color-cream-dark); line-height: 1.6;">
+              Whether your car is a family heirloom resting in a mountain village or a fresh barn find waiting for nut-and-bolt revitalization, Charbel and the Retro Drive team are ready to listen.
+            </p>
+
+            <div class="contact-workshop-details">
+              <div class="workshop-detail-item">
+                <span class="detail-kicker">Workshop Location</span>
+                <span class="detail-main">Greater Beirut &amp; Mount Lebanon, Liban</span>
+              </div>
+              <div class="workshop-detail-item">
+                <span class="detail-kicker">Founder Direct Contact</span>
+                <span class="detail-main">Charbel Maroun Mehawej</span>
+              </div>
+              <div class="workshop-detail-item">
+                <span class="detail-kicker">Direct Line / WhatsApp</span>
+                <span class="detail-main">+961 3 000 000 (By Appointment)</span>
+              </div>
+              <div class="workshop-detail-item">
+                <span class="detail-kicker">Atelier Hours</span>
+                <span class="detail-main">Monday – Saturday: 08:30 – 18:30</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Telegram / Restoration Dossier Form -->
+          <div class="restoration-dossier-card">
+            <div class="dossier-header-bar">
+              <span class="dossier-header-title">Restoration Inquiry Dossier</span>
+              <span class="stamp-badge">RD-FORM / 2026</span>
+            </div>
+
+            <form id="restorationForm">
+              <div class="form-row-duo">
+                <div class="form-group">
+                  <label for="ownerName" class="form-label">Your Name</label>
+                  <input type="text" id="ownerName" name="ownerName" class="form-input" placeholder="e.g. Jean-Paul Boutros" required>
+                </div>
+                <div class="form-group">
+                  <label for="ownerPhone" class="form-label">Phone / WhatsApp</label>
+                  <input type="tel" id="ownerPhone" name="ownerPhone" class="form-input" placeholder="+961 .." required>
+                </div>
+              </div>
+
+              <div class="form-row-duo">
+                <div class="form-group">
+                  <label for="vehicle" class="form-label">Your Classic (Year / Make / Model)</label>
+                  <input type="text" id="vehicle" name="vehicle" class="form-input" placeholder="e.g. 1971 Alfa Romeo GTV or 1970 Oldsmobile" required>
+                </div>
+                <div class="form-group">
+                  <label for="desiredScope" class="form-label">Desired Scope</label>
+                  <select id="desiredScope" name="desiredScope" class="form-select">
+                    <option value="Full Restoration">Complete Nut-and-Bolt Restoration</option>
+                    <option value="Mechanical Overhaul">Engine &amp; Drivetrain Overhaul</option>
+                    <option value="Preservation Service">Preservation &amp; Carburetor Tuning</option>
+                    <option value="Classic Sourcing">Looking to Source a Classic</option>
+                    <option value="Rally Prep">Period Rally Preparation</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="vehicleStory" class="form-label">The Car’s Condition &amp; Story</label>
+                <textarea id="vehicleStory" name="vehicleStory" class="form-textarea" placeholder="Tell us how you found it, its history, current condition, and your dream for the vehicle..." rows="3"></textarea>
+              </div>
+
+              <button type="submit" class="btn-submit-inquiry">
+                Transmit Restoration Dossier
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+              </button>
+            </form>
+
+            <div class="inquiry-receipt-alert" id="inquiryReceipt" role="alert">
+              <strong>✓ DOSSIER TRANSMITTED TO CHARBEL MAROUN MEHAWEJ</strong><br>
+              Reference File: <span id="receiptCode">RD-9140/LB</span><br>
+              Vehicle: <span id="receiptVehicle">Classic Automobile</span><br>
+              We will review your inquiry and connect with you over coffee to discuss the revival path.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top-grid">
+
+        <div class="footer-brand-bio">
+          <div class="nav-brand">
+            <div class="brand-emblem" style="color: var(--color-cream);">RD</div>
+            <div class="brand-text">
+              <span class="brand-title" style="color: var(--color-cream);">Retro Drive LB</span>
+              <span class="brand-subtitle" style="color: var(--color-ochre);">Preserving Soul Across Lebanese Roads</span>
+            </div>
+          </div>
+          <p>
+            An authentic classic car restoration workshop and enthusiast collective in Lebanon. Preserving mechanical character, handcrafted stories, and road culture since 2005.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Navigation</h4>
+          <ul class="footer-nav-list">
+            <li><a href="#hero">The Opening</a></li>
+            <li><a href="#childhood">Childhood Genesis</a></li>
+            <li><a href="#passion">Charbel's Story</a></li>
+            <li><a href="#cars">The Collection</a></li>
+            <li><a href="#oldsmobile">The 1970 Oldsmobile</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">The Atelier</h4>
+          <ul class="footer-nav-list">
+            <li><a href="#philosophy">Philosophy of Care</a></li>
+            <li><a href="#garage">Restoration Crafts</a></li>
+            <li><a href="#events">Community Rallies</a></li>
+            <li><a href="#contact">Start a Restoration</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Territory</h4>
+          <p style="font-size: 0.95rem; line-height: 1.6; margin-bottom: 1rem;">
+            Beirut • Mount Lebanon • Batroun • Byblos • Chouf<br>
+            Lebanese Republic
+          </p>
+          <div class="stamp-badge" style="color: var(--color-ochre-light);">
+            LIBAN • CLASSIQUE
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom-bar">
+        <span>© 2026 RETRO DRIVE LB. FOUNDED BY CHARBEL MAROUN MEHAWEJ. ALL RIGHTS RESERVED.</span>
+        <span>CRAFTED WITH OIL, PASSION, AND MEDITERRANEAN ASPIRATION.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       INTERACTIVE SPECIFICATION ARCHIVE MODAL
+       ========================================================================== -->
+  <div class="editorial-modal-backdrop" id="carModal" role="dialog" aria-modal="true" aria-labelledby="modalCarTitle">
+    <div class="editorial-modal-window">
+      <button class="modal-close-btn" id="carModalClose" type="button" aria-label="Close modal">✕</button>
+      
+      <div style="border-bottom: 2px dashed rgba(28,27,24,0.15); padding-bottom: 1rem; margin-bottom: 1.4rem;">
+        <span class="label-mono" style="color: var(--color-burgundy);">ARCHIVAL SPECIFICATION DOSSIER</span>
+        <h3 id="modalCarTitle" style="font-size: 1.85rem; color: var(--color-petrol); margin-top: 0.3rem;">Vehicle Name</h3>
+        <p id="modalCarOrigin" style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--color-charcoal-muted); margin: 0;">Origin / Assembly</p>
+      </div>
+
+      <div class="car-spec-grid" style="margin-bottom: 1.4rem;">
+        <div class="car-spec-entry">
+          <span class="spec-key">Engine Configuration</span>
+          <span class="spec-val" id="modalCarEngine">-</span>
+        </div>
+        <div class="car-spec-entry">
+          <span class="spec-key">Induction / Fueling</span>
+          <span class="spec-val" id="modalCarCarb">-</span>
+        </div>
+        <div class="car-spec-entry">
+          <span class="spec-key">Transmission</span>
+          <span class="spec-val" id="modalCarTransmission">-</span>
+        </div>
+        <div class="car-spec-entry">
+          <span class="spec-key">Finish &amp; Trim</span>
+          <span class="spec-val" id="modalCarColor">-</span>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 1.2rem;">
+        <h4 style="font-family: var(--font-sans); font-size: 0.95rem; font-weight: 700; color: var(--color-petrol); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem;">Lebanese Heritage &amp; Restoration Notes</h4>
+        <p id="modalCarStory" style="font-size: 1.05rem; line-height: 1.6; color: var(--color-charcoal-light); margin-bottom: 0.8rem;">Story details...</p>
+        <p id="modalCarNotes" style="font-family: var(--font-serif); font-style: italic; font-size: 1rem; color: var(--color-burgundy);">Special notes...</p>
+      </div>
+
+      <div style="text-align: right;">
+        <a href="#contact" class="btn-primary-editorial" style="padding: 0.75rem 1.4rem; font-size: 0.78rem;" onclick="document.getElementById('carModal').classList.remove('active'); document.body.style.overflow='';">Inquire About This Car</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       EVENT RSVP MODAL
+       ========================================================================== -->
+  <div class="editorial-modal-backdrop" id="rsvpModal" role="dialog" aria-modal="true" aria-labelledby="rsvpModalTitle">
+    <div class="editorial-modal-window">
+      <button class="modal-close-btn" id="rsvpModalClose" type="button" aria-label="Close modal">✕</button>
+
+      <span class="label-mono" style="color: var(--color-burgundy);">RETRO DRIVE CONVOY RSVP</span>
+      <h3 id="rsvpModalTitle" style="font-size: 1.7rem; color: var(--color-petrol); margin-top: 0.3rem; margin-bottom: 1.2rem;">Join The Gathering</h3>
+
+      <form id="rsvpForm">
+        <input type="hidden" id="rsvpEventName" name="eventName" value="">
+
+        <div class="form-group">
+          <label for="rsvpDriverName" class="form-label">Driver Full Name</label>
+          <input type="text" id="rsvpDriverName" name="driverName" class="form-input" required placeholder="Your name">
+        </div>
+
+        <div class="form-group">
+          <label for="rsvpDriverCar" class="form-label">Your Classic Car (Year / Make / Model)</label>
+          <input type="text" id="rsvpDriverCar" name="driverCar" class="form-input" required placeholder="e.g. 1974 BMW 2002 or 1969 Mustang">
+        </div>
+
+        <div class="form-group">
+          <label for="rsvpDriverPhone" class="form-label">Mobile / WhatsApp (For Convoy Group)</label>
+          <input type="tel" id="rsvpDriverPhone" name="driverPhone" class="form-input" required placeholder="+961 ..">
+        </div>
+
+        <button type="submit" class="btn-submit-inquiry">
+          Confirm Convoy Spot
+        </button>
+      </form>
+
+      <div id="rsvpSuccess" style="display:none; text-align: center; padding: 2rem 1rem;">
+        <div style="font-size: 2.2rem; color: #2D4C24; margin-bottom: 0.8rem;">✓</div>
+        <h4 style="font-size: 1.4rem; color: var(--color-petrol); margin-bottom: 0.5rem;">You Are In The Convoy!</h4>
+        <p style="font-size: 1.05rem; color: var(--color-charcoal-light);">We will send the meet location, convoy frequency, and route coordinates directly to your WhatsApp.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
