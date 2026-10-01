@@ -333,8 +333,11 @@ function initInquiryForm() {
 
 /* ==========================================================================
    MULTI-HARMONIC INTERACTIVE V8 ENGINE SYNTHESIZER (WEB AUDIO API)
-   Realistic Mechanical Starter Crank • Lopey Muscle Idle • Scroll-Velocity Throttle
+   Production iOS Safari & WebKit Compatible Implementation
+   Synchronous Gesture Unlock • Mechanical Starter Crank • Lopey Muscle Idle • Scroll Throttle
    ========================================================================== */
+const ENGINE_DEBUG = false; // Toggle developer diagnostic HUD
+
 let audioCtx = null;
 let engineState = 'OFF'; // 'OFF' | 'STARTING' | 'RUNNING'
 let currentRpm = 700;
@@ -364,30 +367,174 @@ let noiseFilter = null;
 let noiseGain = null;
 let filterLowpass = null;
 
-function initV8EngineInstrument() {
-  const btn = document.getElementById('soundInstrumentBtn');
-  const rpmLabel = document.getElementById('soundRpmLabel');
-  const hintLabel = document.getElementById('soundHint');
+// Starter audio nodes tracker for clean stops
+let starterNodes = [];
 
-  if (!btn) return;
+// Touch / click deduplication latch
+let lastInteractionTime = 0;
 
-  function ensureAudioContext() {
+/**
+ * Diagnostic HUD updater (if ENGINE_DEBUG is enabled)
+ */
+function updateEngineDebugHud(lastAction = '', lastErr = '') {
+  if (!ENGINE_DEBUG) return;
+  let hud = document.getElementById('engineDebugHud');
+  if (!hud) {
+    hud = document.createElement('div');
+    hud.id = 'engineDebugHud';
+    hud.className = 'engine-debug-hud';
+    hud.innerHTML = `
+      <span class="debug-title">ENGINE DIAGNOSTICS</span>
+      <div class="debug-row"><span>AudioCtx:</span><span id="dbgCtxState" class="debug-val">-</span></div>
+      <div class="debug-row"><span>Engine:</span><span id="dbgEngState" class="debug-val">-</span></div>
+      <div class="debug-row"><span>RPM:</span><span id="dbgRpm" class="debug-val">-</span></div>
+      <div class="debug-row"><span>Last Action:</span><span id="dbgAction" class="debug-val">-</span></div>
+      <div class="debug-row"><span>Error:</span><span id="dbgErr" class="debug-val">-</span></div>
+    `;
+    document.body.appendChild(hud);
+  }
+
+  const ctxStateEl = document.getElementById('dbgCtxState');
+  const engStateEl = document.getElementById('dbgEngState');
+  const rpmEl = document.getElementById('dbgRpm');
+  const actionEl = document.getElementById('dbgAction');
+  const errEl = document.getElementById('dbgErr');
+
+  const stateStr = audioCtx ? audioCtx.state : 'null';
+  if (ctxStateEl) {
+    ctxStateEl.textContent = stateStr;
+    ctxStateEl.className = 'debug-val ' + (stateStr === 'running' ? 'ok' : stateStr === 'suspended' ? 'warn' : 'err');
+  }
+  if (engStateEl) {
+    engStateEl.textContent = engineState;
+    engStateEl.className = 'debug-val ' + (engineState === 'RUNNING' ? 'ok' : engineState === 'STARTING' ? 'warn' : '');
+  }
+  if (rpmEl) {
+    rpmEl.textContent = Math.round(currentRpm);
+  }
+  if (lastAction && actionEl) actionEl.textContent = lastAction;
+  if (errEl) {
+    errEl.textContent = lastErr || 'none';
+    errEl.className = 'debug-val ' + (lastErr ? 'err' : 'ok');
+  }
+}
+
+/**
+ * Synchronous iOS WebKit AudioContext Initialization & Unlock.
+ * MUST be executed synchronously on the user gesture callstack.
+ */
+function unlockAudioContextSync() {
+  try {
     if (!audioCtx) {
       const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtxClass) {
+        console.warn('[V8 Engine] Web Audio API is not supported in this environment.');
+        return false;
+      }
       audioCtx = new AudioCtxClass();
+
+      // Monitor AudioContext lifecycle state changes
+      audioCtx.onstatechange = () => {
+        if (ENGINE_DEBUG) console.log('[V8 Engine] AudioContext statechange:', audioCtx.state);
+        updateEngineDebugHud('statechange:' + audioCtx.state);
+
+        // If system suspends or interrupts audio context unexpectedly while RUNNING
+        if (audioCtx.state === 'interrupted' || audioCtx.state === 'suspended') {
+          if (engineState === 'RUNNING') {
+            // Keep state or notify UI
+          }
+        }
+      };
     }
-    if (audioCtx.state === 'suspended') {
-      audioCtx.resume();
+
+    // Crucial iOS Safari unlock step: Play a synchronous silent buffer immediately
+    // inside the direct user-activation tick before any asynchronous dispatch
+    if (audioCtx.state !== 'closed') {
+      const silentBuffer = audioCtx.createBuffer(1, 1, audioCtx.sampleRate || 44100);
+      const silentSource = audioCtx.createBufferSource();
+      silentSource.buffer = silentBuffer;
+      silentSource.connect(audioCtx.destination);
+      silentSource.start(0);
+
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(e => {
+          console.warn('[V8 Engine] audioCtx.resume() failed:', e);
+        });
+      }
+    }
+
+    updateEngineDebugHud('unlocked');
+    return true;
+  } catch (err) {
+    console.error('[V8 Engine] Error during audio unlock:', err);
+    updateEngineDebugHud('unlock_err', err.message);
+    return false;
+  }
+}
+
+function initV8EngineInstrument() {
+  const btn = document.getElementById('soundInstrumentBtn');
+  if (!btn) return;
+
+  if (ENGINE_DEBUG) updateEngineDebugHud('init');
+
+  // Unified user gesture handler: supports pointerup or click with 350ms debounce
+  // to avoid double activation on touch devices that dispatch touch+click
+  function handleEngineToggle(e) {
+    const now = Date.now();
+    if (now - lastInteractionTime < 350) {
+      if (e && e.preventDefault) e.preventDefault();
+      return;
+    }
+    lastInteractionTime = now;
+
+    if (e && e.cancelable) {
+      e.preventDefault();
+    }
+
+    if (engineState === 'OFF') {
+      // 1. Synchronously unlock and activate Web Audio on this user gesture
+      const ok = unlockAudioContextSync();
+      if (!ok) return;
+
+      // 2. Start starter crank sequence
+      startV8EngineSequence();
+    } else if (engineState === 'RUNNING' || engineState === 'STARTING') {
+      stopV8Engine();
     }
   }
 
-  // Master Button Click handler (Toggles start or stop)
-  btn.addEventListener('click', () => {
-    ensureAudioContext();
+  // Use click as primary standard event; prevent touch duplicate
+  btn.addEventListener('click', handleEngineToggle);
+  btn.addEventListener('touchend', (e) => {
+    // Some older iOS Safari versions require touch-initiated unlock
+    handleEngineToggle(e);
+  }, { passive: false });
 
-    if (engineState === 'OFF') {
-      startV8EngineSequence();
-    } else if (engineState === 'RUNNING') {
+  // Handle visibility / page hide to prevent stuck audio when navigating away
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      if (engineState === 'RUNNING' && audioCtx && audioCtx.state === 'running') {
+        // Mute smoothly when tab/app goes backgrounded
+        if (masterGain && audioCtx) {
+          try {
+            masterGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+          } catch (_) {}
+        }
+      }
+    } else {
+      if (engineState === 'RUNNING' && masterGain && audioCtx && audioCtx.state === 'running') {
+        try {
+          masterGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+          masterGain.gain.exponentialRampToValueAtTime(0.38, audioCtx.currentTime + 0.2);
+        } catch (_) {}
+      }
+    }
+    updateEngineDebugHud('vis_change:' + (document.hidden ? 'hidden' : 'visible'));
+  });
+
+  window.addEventListener('pagehide', () => {
+    if (engineState === 'RUNNING') {
       stopV8Engine();
     }
   });
@@ -397,7 +544,7 @@ function initV8EngineInstrument() {
   lastScrollTime = performance.now();
 
   function onScrollThrottle() {
-    // SCROLLING MUST DO NOTHING IF ENGINE IS OFF
+    // SCROLLING MUST DO NOTHING IF ENGINE IS NOT RUNNING
     if (engineState !== 'RUNNING') return;
 
     const currentY = window.scrollY || window.pageYOffset || 0;
@@ -449,6 +596,9 @@ function startV8EngineSequence() {
   if (rpmLabel) rpmLabel.textContent = 'STARTING';
   if (hintLabel) hintLabel.textContent = 'CRANK';
 
+  updateEngineDebugHud('starting_crank');
+
+  // Build synthesizer audio graph
   buildAudioGraph();
 
   // Play realistic mechanical starter motor turning over
@@ -457,6 +607,11 @@ function startV8EngineSequence() {
   // Combustion catches after starter sequence (~920ms)
   setTimeout(() => {
     if (engineState !== 'STARTING') return;
+
+    // Verify audio context is genuinely running or attempt resume
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
+    }
 
     engineState = 'RUNNING';
     if (btn) {
@@ -469,204 +624,223 @@ function startV8EngineSequence() {
     currentRpm = 1350;
     targetRpm = 700;
 
-    // Fade in master engine bus smoothly as combustion catches
+    // Fade in master engine bus smoothly as combustion catches (WebKit-safe values >= 0.0001)
     if (masterGain && audioCtx) {
-      masterGain.gain.setValueAtTime(0.001, audioCtx.currentTime);
-      masterGain.gain.exponentialRampToValueAtTime(0.38, audioCtx.currentTime + 0.35);
+      try {
+        const now = audioCtx.currentTime;
+        masterGain.gain.setValueAtTime(0.001, now);
+        masterGain.gain.exponentialRampToValueAtTime(0.38, now + 0.35);
+      } catch (err) {
+        if (masterGain) masterGain.gain.value = 0.38;
+      }
     }
 
     startRpmLoop();
+    updateEngineDebugHud('running');
   }, 920);
 }
 
 /**
  * Believable mechanical classic-car starter motor sound:
- * Layered heavy starter motor whine + rhythmic compression compression strokes
- * (4 rhythmic mechanical chugs of cylinders being rotated against compression)
+ * Layered heavy starter motor whine + rhythmic compression strokes
  */
 function playStarterCrank() {
   if (!audioCtx) return;
 
   const now = audioCtx.currentTime;
+  starterNodes = [];
 
-  // 1. Starter DC Motor Whine (heavy 12V starter under battery load)
-  const motorOsc = audioCtx.createOscillator();
-  const motorGain = audioCtx.createGain();
-  const motorFilter = audioCtx.createBiquadFilter();
+  try {
+    // 1. Starter DC Motor Whine (heavy 12V starter under battery load)
+    const motorOsc = audioCtx.createOscillator();
+    const motorGain = audioCtx.createGain();
+    const motorFilter = audioCtx.createBiquadFilter();
 
-  motorOsc.type = 'sawtooth';
-  motorOsc.frequency.setValueAtTime(68, now);
-  motorOsc.frequency.linearRampToValueAtTime(82, now + 0.3);
-  motorOsc.frequency.linearRampToValueAtTime(74, now + 0.6);
-  motorOsc.frequency.linearRampToValueAtTime(96, now + 0.9);
+    motorOsc.type = 'sawtooth';
+    motorOsc.frequency.setValueAtTime(68, now);
+    motorOsc.frequency.linearRampToValueAtTime(82, now + 0.3);
+    motorOsc.frequency.linearRampToValueAtTime(74, now + 0.6);
+    motorOsc.frequency.linearRampToValueAtTime(96, now + 0.9);
 
-  motorFilter.type = 'lowpass';
-  motorFilter.frequency.setValueAtTime(320, now);
-  motorFilter.Q.setValueAtTime(1.5, now);
+    motorFilter.type = 'lowpass';
+    motorFilter.frequency.setValueAtTime(320, now);
+    motorFilter.Q.setValueAtTime(1.5, now);
 
-  motorGain.gain.setValueAtTime(0.001, now);
-  motorGain.gain.linearRampToValueAtTime(0.18, now + 0.08);
-  motorGain.gain.linearRampToValueAtTime(0.16, now + 0.7);
-  motorGain.gain.linearRampToValueAtTime(0.001, now + 0.92);
+    // Safe gain values for WebKit: minimum 0.0001
+    motorGain.gain.setValueAtTime(0.0001, now);
+    motorGain.gain.linearRampToValueAtTime(0.18, now + 0.08);
+    motorGain.gain.linearRampToValueAtTime(0.16, now + 0.7);
+    motorGain.gain.linearRampToValueAtTime(0.0001, now + 0.92);
 
-  motorOsc.connect(motorFilter);
-  motorFilter.connect(motorGain);
-  motorGain.connect(compressor || audioCtx.destination);
+    motorOsc.connect(motorFilter);
+    motorFilter.connect(motorGain);
+    motorGain.connect(compressor || audioCtx.destination);
 
-  motorOsc.start(now);
-  motorOsc.stop(now + 0.93);
+    motorOsc.start(now);
+    motorOsc.stop(now + 0.93);
+    starterNodes.push(motorOsc);
 
-  // 2. Rhythmic Mechanical Starter Pulses (the chug-chug-chug of pistons moving)
-  const pulseTimes = [0.08, 0.28, 0.48, 0.68];
-  pulseTimes.forEach((pt, i) => {
-    const pulseOsc = audioCtx.createOscillator();
-    const pulseGain = audioCtx.createGain();
-    const pFilter = audioCtx.createBiquadFilter();
+    // 2. Rhythmic Mechanical Starter Pulses (the chug-chug-chug of pistons moving)
+    const pulseTimes = [0.08, 0.28, 0.48, 0.68];
+    pulseTimes.forEach((pt, i) => {
+      const pulseOsc = audioCtx.createOscillator();
+      const pulseGain = audioCtx.createGain();
+      const pFilter = audioCtx.createBiquadFilter();
 
-    pulseOsc.type = 'triangle';
-    // Pitch drops slightly on each heavy compression stroke
-    pulseOsc.frequency.setValueAtTime(42 + i * 4, now + pt);
+      pulseOsc.type = 'triangle';
+      pulseOsc.frequency.setValueAtTime(42 + i * 4, now + pt);
 
-    pFilter.type = 'lowpass';
-    pFilter.frequency.setValueAtTime(180, now + pt);
+      pFilter.type = 'lowpass';
+      pFilter.frequency.setValueAtTime(180, now + pt);
 
-    pulseGain.gain.setValueAtTime(0.001, now + pt);
-    pulseGain.gain.linearRampToValueAtTime(0.24, now + pt + 0.04);
-    pulseGain.gain.exponentialRampToValueAtTime(0.001, now + pt + 0.16);
+      pulseGain.gain.setValueAtTime(0.0001, now + pt);
+      pulseGain.gain.linearRampToValueAtTime(0.24, now + pt + 0.04);
+      // WebKit exponential ramp requires target value > 0
+      pulseGain.gain.exponentialRampToValueAtTime(0.0001, now + pt + 0.16);
 
-    pulseOsc.connect(pFilter);
-    pFilter.connect(pulseGain);
-    pulseGain.connect(compressor || audioCtx.destination);
+      pulseOsc.connect(pFilter);
+      pFilter.connect(pulseGain);
+      pulseGain.connect(compressor || audioCtx.destination);
 
-    pulseOsc.start(now + pt);
-    pulseOsc.stop(now + pt + 0.18);
-  });
+      pulseOsc.start(now + pt);
+      pulseOsc.stop(now + pt + 0.18);
+      starterNodes.push(pulseOsc);
+    });
 
-  // 3. Mechanical Starter Click & Solenoid Engagement at beginning
-  const clickOsc = audioCtx.createOscillator();
-  const clickGain = audioCtx.createGain();
-  clickOsc.type = 'square';
-  clickOsc.frequency.setValueAtTime(140, now);
-  clickGain.gain.setValueAtTime(0.2, now);
-  clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+    // 3. Mechanical Starter Click & Solenoid Engagement at beginning
+    const clickOsc = audioCtx.createOscillator();
+    const clickGain = audioCtx.createGain();
+    clickOsc.type = 'square';
+    clickOsc.frequency.setValueAtTime(140, now);
+    clickGain.gain.setValueAtTime(0.2, now);
+    clickGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
 
-  clickOsc.connect(clickGain);
-  clickGain.connect(compressor || audioCtx.destination);
+    clickOsc.connect(clickGain);
+    clickGain.connect(compressor || audioCtx.destination);
 
-  clickOsc.start(now);
-  clickOsc.stop(now + 0.06);
+    clickOsc.start(now);
+    clickOsc.stop(now + 0.06);
+    starterNodes.push(clickOsc);
+  } catch (err) {
+    console.warn('[V8 Engine] Starter sound generation error:', err);
+  }
 }
 
 function buildAudioGraph() {
   if (!audioCtx) return;
 
-  // Master Gain -> Dynamic Compressor -> Destination
-  masterGain = audioCtx.createGain();
-  masterGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+  try {
+    // Master Gain -> Dynamic Compressor -> Destination
+    masterGain = audioCtx.createGain();
+    masterGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
 
-  compressor = audioCtx.createDynamicsCompressor();
-  compressor.threshold.setValueAtTime(-14, audioCtx.currentTime);
-  compressor.knee.setValueAtTime(8, audioCtx.currentTime);
-  compressor.ratio.setValueAtTime(4.0, audioCtx.currentTime);
-  compressor.attack.setValueAtTime(0.004, audioCtx.currentTime);
-  compressor.release.setValueAtTime(0.18, audioCtx.currentTime);
+    compressor = audioCtx.createDynamicsCompressor();
+    compressor.threshold.setValueAtTime(-14, audioCtx.currentTime);
+    compressor.knee.setValueAtTime(8, audioCtx.currentTime);
+    compressor.ratio.setValueAtTime(4.0, audioCtx.currentTime);
+    compressor.attack.setValueAtTime(0.004, audioCtx.currentTime);
+    compressor.release.setValueAtTime(0.18, audioCtx.currentTime);
 
-  masterGain.connect(compressor);
-  compressor.connect(audioCtx.destination);
+    masterGain.connect(compressor);
+    compressor.connect(audioCtx.destination);
 
-  engineBus = audioCtx.createGain();
-  engineBus.gain.setValueAtTime(1.0, audioCtx.currentTime);
+    engineBus = audioCtx.createGain();
+    engineBus.gain.setValueAtTime(1.0, audioCtx.currentTime);
 
-  filterLowpass = audioCtx.createBiquadFilter();
-  filterLowpass.type = 'lowpass';
-  filterLowpass.frequency.setValueAtTime(260, audioCtx.currentTime);
-  filterLowpass.Q.setValueAtTime(2.2, audioCtx.currentTime);
+    filterLowpass = audioCtx.createBiquadFilter();
+    filterLowpass.type = 'lowpass';
+    filterLowpass.frequency.setValueAtTime(260, audioCtx.currentTime);
+    filterLowpass.Q.setValueAtTime(2.2, audioCtx.currentTime);
 
-  engineBus.connect(filterLowpass);
-  filterLowpass.connect(masterGain);
+    engineBus.connect(filterLowpass);
+    filterLowpass.connect(masterGain);
 
-  // 1. Fundamental Oscillator (46Hz at 700 RPM: deep V8 cross-plane thump)
-  oscFund = audioCtx.createOscillator();
-  oscFund.type = 'triangle';
-  oscFund.frequency.setValueAtTime(46.6, audioCtx.currentTime);
+    // 1. Fundamental Oscillator (46Hz at 700 RPM: deep V8 cross-plane thump)
+    oscFund = audioCtx.createOscillator();
+    oscFund.type = 'triangle';
+    oscFund.frequency.setValueAtTime(46.6, audioCtx.currentTime);
 
-  const gainFund = audioCtx.createGain();
-  gainFund.gain.setValueAtTime(0.72, audioCtx.currentTime);
-  oscFund.connect(gainFund);
-  gainFund.connect(engineBus);
+    const gainFund = audioCtx.createGain();
+    gainFund.gain.setValueAtTime(0.72, audioCtx.currentTime);
+    oscFund.connect(gainFund);
+    gainFund.connect(engineBus);
 
-  // 2. 2nd Harmonic (Cross-plane engine rumble & exhaust manifold resonance)
-  oscHarm2 = audioCtx.createOscillator();
-  oscHarm2.type = 'sawtooth';
-  oscHarm2.frequency.setValueAtTime(93.2, audioCtx.currentTime);
+    // 2. 2nd Harmonic (Cross-plane engine rumble & exhaust manifold resonance)
+    oscHarm2 = audioCtx.createOscillator();
+    oscHarm2.type = 'sawtooth';
+    oscHarm2.frequency.setValueAtTime(93.2, audioCtx.currentTime);
 
-  const gainHarm2 = audioCtx.createGain();
-  gainHarm2.gain.setValueAtTime(0.38, audioCtx.currentTime);
-  oscHarm2.connect(gainHarm2);
-  gainHarm2.connect(engineBus);
+    const gainHarm2 = audioCtx.createGain();
+    gainHarm2.gain.setValueAtTime(0.38, audioCtx.currentTime);
+    oscHarm2.connect(gainHarm2);
+    gainHarm2.connect(engineBus);
 
-  // 3. 3rd Harmonic (Chamber exhaust bark)
-  oscHarm3 = audioCtx.createOscillator();
-  oscHarm3.type = 'triangle';
-  oscHarm3.frequency.setValueAtTime(140, audioCtx.currentTime);
+    // 3. 3rd Harmonic (Chamber exhaust bark)
+    oscHarm3 = audioCtx.createOscillator();
+    oscHarm3.type = 'triangle';
+    oscHarm3.frequency.setValueAtTime(140, audioCtx.currentTime);
 
-  const gainHarm3 = audioCtx.createGain();
-  gainHarm3.gain.setValueAtTime(0.24, audioCtx.currentTime);
-  oscHarm3.connect(gainHarm3);
-  gainHarm3.connect(engineBus);
+    const gainHarm3 = audioCtx.createGain();
+    gainHarm3.gain.setValueAtTime(0.24, audioCtx.currentTime);
+    oscHarm3.connect(gainHarm3);
+    gainHarm3.connect(engineBus);
 
-  // 4. 4th Harmonic (Mechanical pushrod valve train texture)
-  oscHarm4 = audioCtx.createOscillator();
-  oscHarm4.type = 'sine';
-  oscHarm4.frequency.setValueAtTime(186.4, audioCtx.currentTime);
+    // 4. 4th Harmonic (Mechanical pushrod valve train texture)
+    oscHarm4 = audioCtx.createOscillator();
+    oscHarm4.type = 'sine';
+    oscHarm4.frequency.setValueAtTime(186.4, audioCtx.currentTime);
 
-  const gainHarm4 = audioCtx.createGain();
-  gainHarm4.gain.setValueAtTime(0.16, audioCtx.currentTime);
-  oscHarm4.connect(gainHarm4);
-  gainHarm4.connect(engineBus);
+    const gainHarm4 = audioCtx.createGain();
+    gainHarm4.gain.setValueAtTime(0.16, audioCtx.currentTime);
+    oscHarm4.connect(gainHarm4);
+    gainHarm4.connect(engineBus);
 
-  // 5. Authentic American V8 Cam Chop LFO (Uneven muscle idle lope)
-  lfoCamChop = audioCtx.createOscillator();
-  lfoCamChop.type = 'sine';
-  lfoCamChop.frequency.setValueAtTime(5.2, audioCtx.currentTime);
+    // 5. Authentic American V8 Cam Chop LFO (Uneven muscle idle lope)
+    lfoCamChop = audioCtx.createOscillator();
+    lfoCamChop.type = 'sine';
+    lfoCamChop.frequency.setValueAtTime(5.2, audioCtx.currentTime);
 
-  lfoCamGain = audioCtx.createGain();
-  lfoCamGain.gain.setValueAtTime(3.8, audioCtx.currentTime);
+    lfoCamGain = audioCtx.createGain();
+    lfoCamGain.gain.setValueAtTime(3.8, audioCtx.currentTime);
 
-  lfoCamChop.connect(lfoCamGain);
-  lfoCamGain.connect(oscFund.frequency);
-  lfoCamGain.connect(oscHarm2.frequency);
+    lfoCamChop.connect(lfoCamGain);
+    lfoCamGain.connect(oscFund.frequency);
+    lfoCamGain.connect(oscHarm2.frequency);
 
-  // 6. Filtered Mechanical Exhaust Texture (Warm low-frequency pink/bandpass air)
-  const bufferSize = audioCtx.sampleRate * 2;
-  const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-  const output = noiseBuffer.getChannelData(0);
-  for (let i = 0; i < bufferSize; i++) {
-    output[i] = Math.random() * 2 - 1;
+    // 6. Filtered Mechanical Exhaust Texture (Warm low-frequency pink/bandpass air)
+    const bufferSize = Math.floor(audioCtx.sampleRate * 2);
+    const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const output = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      output[i] = Math.random() * 2 - 1;
+    }
+
+    noiseNode = audioCtx.createBufferSource();
+    noiseNode.buffer = noiseBuffer;
+    noiseNode.loop = true;
+
+    noiseFilter = audioCtx.createBiquadFilter();
+    noiseFilter.type = 'bandpass';
+    noiseFilter.frequency.setValueAtTime(290, audioCtx.currentTime);
+    noiseFilter.Q.setValueAtTime(1.8, audioCtx.currentTime);
+
+    noiseGain = audioCtx.createGain();
+    noiseGain.gain.setValueAtTime(0.14, audioCtx.currentTime);
+
+    noiseNode.connect(noiseFilter);
+    noiseFilter.connect(noiseGain);
+    noiseGain.connect(engineBus);
+
+    oscFund.start();
+    oscHarm2.start();
+    oscHarm3.start();
+    oscHarm4.start();
+    lfoCamChop.start();
+    noiseNode.start();
+  } catch (err) {
+    console.warn('[V8 Engine] buildAudioGraph error:', err);
+    updateEngineDebugHud('build_err', err.message);
   }
-
-  noiseNode = audioCtx.createBufferSource();
-  noiseNode.buffer = noiseBuffer;
-  noiseNode.loop = true;
-
-  noiseFilter = audioCtx.createBiquadFilter();
-  noiseFilter.type = 'bandpass';
-  noiseFilter.frequency.setValueAtTime(290, audioCtx.currentTime);
-  noiseFilter.Q.setValueAtTime(1.8, audioCtx.currentTime);
-
-  noiseGain = audioCtx.createGain();
-  noiseGain.gain.setValueAtTime(0.14, audioCtx.currentTime);
-
-  noiseNode.connect(noiseFilter);
-  noiseFilter.connect(noiseGain);
-  noiseGain.connect(engineBus);
-
-  oscFund.start();
-  oscHarm2.start();
-  oscHarm3.start();
-  oscHarm4.start();
-  lfoCamChop.start();
-  noiseNode.start();
 }
 
 function setTargetRpm(rpm) {
@@ -727,32 +901,39 @@ function startRpmLoop() {
       needle.style.transform = `translateX(-50%) rotate(${deg}deg)`;
     }
 
-    // Update Audio Parameters dynamically:
-    if (audioCtx && oscFund) {
-      const now = audioCtx.currentTime;
-      // 700 RPM -> ~46.6Hz, 3000 RPM -> ~200Hz
-      const fundFreq = (currentRpm / 700) * 46.6;
+    // Update Audio Parameters dynamically
+    if (audioCtx && oscFund && audioCtx.state === 'running') {
+      try {
+        const now = audioCtx.currentTime;
+        // 700 RPM -> ~46.6Hz, 3000 RPM -> ~200Hz
+        const fundFreq = (currentRpm / 700) * 46.6;
 
-      oscFund.frequency.setValueAtTime(fundFreq, now);
-      oscHarm2.frequency.setValueAtTime(fundFreq * 2, now);
-      oscHarm3.frequency.setValueAtTime(fundFreq * 3, now);
-      oscHarm4.frequency.setValueAtTime(fundFreq * 4, now);
+        oscFund.frequency.setValueAtTime(fundFreq, now);
+        if (oscHarm2) oscHarm2.frequency.setValueAtTime(fundFreq * 2, now);
+        if (oscHarm3) oscHarm3.frequency.setValueAtTime(fundFreq * 3, now);
+        if (oscHarm4) oscHarm4.frequency.setValueAtTime(fundFreq * 4, now);
 
-      // Filter cutoff opens up smoothly as throttle opens (from 260Hz at idle to 880Hz under rev)
-      const cutoff = 260 + ((currentRpm - 700) / 2300) * 620;
-      filterLowpass.frequency.setValueAtTime(cutoff, now);
+        // Filter cutoff opens up smoothly as throttle opens (from 260Hz at idle to 880Hz under rev)
+        if (filterLowpass) {
+          const cutoff = 260 + ((currentRpm - 700) / 2300) * 620;
+          filterLowpass.frequency.setValueAtTime(cutoff, now);
+        }
 
-      // Noise texture expands with exhaust volume
-      if (noiseGain) {
-        const nGain = 0.14 + ((currentRpm - 700) / 2300) * 0.12;
-        noiseGain.gain.setValueAtTime(nGain, now);
-      }
+        // Noise texture expands with exhaust volume
+        if (noiseGain) {
+          const nGain = 0.14 + ((currentRpm - 700) / 2300) * 0.12;
+          noiseGain.gain.setValueAtTime(nGain, now);
+        }
 
-      // LFO cam lope rate speeds up naturally with crank speed
-      const lfoSpeed = 5.2 + ((currentRpm - 700) / 2300) * 11;
-      lfoCamChop.frequency.setValueAtTime(lfoSpeed, now);
+        // LFO cam lope rate speeds up naturally with crank speed
+        if (lfoCamChop) {
+          const lfoSpeed = 5.2 + ((currentRpm - 700) / 2300) * 11;
+          lfoCamChop.frequency.setValueAtTime(lfoSpeed, now);
+        }
+      } catch (_) {}
     }
 
+    if (ENGINE_DEBUG) updateEngineDebugHud('running');
     revAnimationTimer = requestAnimationFrame(update);
   }
 
@@ -781,22 +962,36 @@ function stopV8Engine() {
     revAnimationTimer = null;
   }
 
+  // Stop any lingering starter sounds
+  if (starterNodes && starterNodes.length) {
+    starterNodes.forEach(node => {
+      try { node.stop(); } catch (_) {}
+    });
+    starterNodes = [];
+  }
+
   if (masterGain && audioCtx) {
-    // Smooth deceleration and fade out
-    masterGain.gain.setValueAtTime(masterGain.gain.value, audioCtx.currentTime);
-    masterGain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.4);
+    try {
+      const now = audioCtx.currentTime;
+      masterGain.gain.setValueAtTime(Math.max(0.0001, masterGain.gain.value), now);
+      masterGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+    } catch (_) {
+      if (masterGain) masterGain.gain.value = 0.0001;
+    }
 
     setTimeout(() => {
       try {
-        if (oscFund) oscFund.stop();
-        if (oscHarm2) oscHarm2.stop();
-        if (oscHarm3) oscHarm3.stop();
-        if (oscHarm4) oscHarm4.stop();
-        if (lfoCamChop) lfoCamChop.stop();
-        if (noiseNode) noiseNode.stop();
-
-        if (masterGain) masterGain.disconnect();
+        if (oscFund) { oscFund.stop(); oscFund.disconnect(); oscFund = null; }
+        if (oscHarm2) { oscHarm2.stop(); oscHarm2.disconnect(); oscHarm2 = null; }
+        if (oscHarm3) { oscHarm3.stop(); oscHarm3.disconnect(); oscHarm3 = null; }
+        if (oscHarm4) { oscHarm4.stop(); oscHarm4.disconnect(); oscHarm4 = null; }
+        if (lfoCamChop) { lfoCamChop.stop(); lfoCamChop.disconnect(); lfoCamChop = null; }
+        if (noiseNode) { noiseNode.stop(); noiseNode.disconnect(); noiseNode = null; }
+        if (masterGain) { masterGain.disconnect(); masterGain = null; }
       } catch (_) {}
-    }, 450);
+      updateEngineDebugHud('stopped');
+    }, 400);
+  } else {
+    updateEngineDebugHud('stopped');
   }
 }

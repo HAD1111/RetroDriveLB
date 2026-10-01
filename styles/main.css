@@ -2667,3 +2667,57 @@ img {
     text-align: center;
   }
 }
+
+/* Developer Audio Diagnostic HUD */
+.engine-debug-hud {
+  position: fixed;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(23, 43, 49, 0.94);
+  color: #F1E7D3;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  line-height: 1.45;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(241, 231, 211, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  z-index: 10000;
+  pointer-events: none;
+  max-width: 240px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.engine-debug-hud .debug-title {
+  color: #B8944A;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+  display: block;
+  border-bottom: 1px solid rgba(241, 231, 211, 0.15);
+  padding-bottom: 2px;
+}
+
+.engine-debug-hud .debug-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.engine-debug-hud .debug-val {
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.engine-debug-hud .debug-val.ok {
+  color: #4ade80;
+}
+
+.engine-debug-hud .debug-val.warn {
+  color: #fbbf24;
+}
+
+.engine-debug-hud .debug-val.err {
+  color: #f87171;
+}
