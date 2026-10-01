@@ -439,10 +439,18 @@ function unlockAudioContextSync() {
         updateEngineDebugHud('statechange:' + audioCtx.state);
 
         // If system suspends or interrupts audio context unexpectedly while RUNNING
-        if (audioCtx.state === 'interrupted' || audioCtx.state === 'suspended') {
+        if (audioCtx.state === 'suspended' || audioCtx.state === 'interrupted' || audioCtx.state === 'closed') {
           if (engineState === 'RUNNING') {
-            // Keep state or notify UI
+            const hintLabel = document.getElementById('soundHint');
+            const rpmLabel = document.getElementById('soundRpmLabel');
+            if (hintLabel) hintLabel.textContent = 'PAUSED';
+            if (rpmLabel) rpmLabel.textContent = 'STANDBY';
           }
+        } else if (audioCtx.state === 'running' && engineState === 'RUNNING') {
+          const hintLabel = document.getElementById('soundHint');
+          const rpmLabel = document.getElementById('soundRpmLabel');
+          if (hintLabel) hintLabel.textContent = 'SCROLL TO REV';
+          if (rpmLabel) rpmLabel.textContent = `${Math.round(currentRpm)} RPM`;
         }
       };
     }
@@ -478,17 +486,18 @@ function initV8EngineInstrument() {
 
   if (ENGINE_DEBUG) updateEngineDebugHud('init');
 
-  // Unified user gesture handler: supports pointerup or click with 350ms debounce
-  // to avoid double activation on touch devices that dispatch touch+click
+  // Unified user gesture handler: supports pointerdown / click with 250ms debounce
+  // to avoid double activation on touch devices that dispatch touch+click, while
+  // keeping subsequent ON -> OFF -> ON taps crisp and responsive
   function handleEngineToggle(e) {
     const now = Date.now();
-    if (now - lastInteractionTime < 350) {
+    if (now - lastInteractionTime < 250) {
       if (e && e.preventDefault) e.preventDefault();
       return;
     }
     lastInteractionTime = now;
 
-    if (e && e.cancelable) {
+    if (e && e.cancelable && e.type !== 'click') {
       e.preventDefault();
     }
 
@@ -504,10 +513,9 @@ function initV8EngineInstrument() {
     }
   }
 
-  // Use click as primary standard event; prevent touch duplicate
+  // Use click as primary standard event; support touchend without double-fire
   btn.addEventListener('click', handleEngineToggle);
   btn.addEventListener('touchend', (e) => {
-    // Some older iOS Safari versions require touch-initiated unlock
     handleEngineToggle(e);
   }, { passive: false });
 
@@ -515,7 +523,7 @@ function initV8EngineInstrument() {
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       if (engineState === 'RUNNING' && audioCtx && audioCtx.state === 'running') {
-        // Mute smoothly when tab/app goes backgrounded
+        // Mute smoothly when tab/app is backgrounded without destroying the graph
         if (masterGain && audioCtx) {
           try {
             masterGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
@@ -523,11 +531,26 @@ function initV8EngineInstrument() {
         }
       }
     } else {
-      if (engineState === 'RUNNING' && masterGain && audioCtx && audioCtx.state === 'running') {
-        try {
-          masterGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-          masterGain.gain.exponentialRampToValueAtTime(0.38, audioCtx.currentTime + 0.2);
-        } catch (_) {}
+      // Returning to page: if still in RUNNING and context is running, restore volume
+      if (engineState === 'RUNNING' && audioCtx) {
+        if (audioCtx.state === 'running' && masterGain) {
+          try {
+            masterGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+            masterGain.gain.exponentialRampToValueAtTime(0.38, audioCtx.currentTime + 0.25);
+          } catch (_) {}
+        } else if (audioCtx.state === 'suspended') {
+          // iOS may have suspended the audio thread in background; try non-blocking resume
+          audioCtx.resume().then(() => {
+            if (masterGain && audioCtx) {
+              masterGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+              masterGain.gain.exponentialRampToValueAtTime(0.38, audioCtx.currentTime + 0.25);
+            }
+          }).catch(() => {
+            // If iOS requires fresh gesture, UI reflects standby
+            const hintLabel = document.getElementById('soundHint');
+            if (hintLabel) hintLabel.textContent = 'TAP ENGINE';
+          });
+        }
       }
     }
     updateEngineDebugHud('vis_change:' + (document.hidden ? 'hidden' : 'visible'));
@@ -608,9 +631,15 @@ function startV8EngineSequence() {
   setTimeout(() => {
     if (engineState !== 'STARTING') return;
 
-    // Verify audio context is genuinely running or attempt resume
+    // Verify audio context is genuine; if suspended, attempt resume
     if (audioCtx && audioCtx.state === 'suspended') {
       audioCtx.resume().catch(() => {});
+    }
+
+    // Defensive check: only set UI to running if audio context is active
+    if (!audioCtx || audioCtx.state === 'closed') {
+      stopV8Engine();
+      return;
     }
 
     engineState = 'RUNNING';
